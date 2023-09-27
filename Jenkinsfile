@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     //gv.buildImage()
-                    buildImage()
+                    buildImage 'vascheffer/demo-app:jma-2.0'
                 }
             }
         }
