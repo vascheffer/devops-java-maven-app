@@ -31,12 +31,14 @@ pipeline {
             }
         }
 
-        stage("build image") {
+        stage("build and push image") {
 
             steps {
                 script {
                     //gv.buildImage()
                     buildImage 'vascheffer/demo-app:jma-2.0'
+                    dockerLogin()
+                    dockerPush 'vascheffer/demo-app:jma-2.0'
                 }
             }
         }
