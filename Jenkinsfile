@@ -83,9 +83,9 @@ pipeline {
                         sh 'git branch'
                         sh 'git config --list'
 
-                        sh "git remote set-url origin https://${USER}Ç${PASS}@github.com/vascheffer/devops-java-maven-app.git"
+                        sh "git remote set-url origin https://${USER}${PASS}@github.com/vascheffer/devops-java-maven-app.git"
                         sh 'git add .'
-                        sh 'git commit -m "ci: update app version in build \\\${env.BUILD_NUMBER}"'
+                        sh 'git commit -m "ci: update app version in build"'
                         sh 'git push origin HEAD:jenkins-shared-lib'
                     }
 
