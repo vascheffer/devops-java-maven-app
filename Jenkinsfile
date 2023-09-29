@@ -26,6 +26,21 @@ pipeline {
             }
         }
 
+        stage('increment version') {
+            steps {
+                script {
+                    echo 'incrementing app version...'
+                    sh 'mvn build-helper:parse-version versions:set \
+                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+                        versions:commit'
+                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+                    def version = matcher[0][1]
+                    env.IMAGE_NAME = "$version-${env.BUILD_NUMBER}" // build number is generate by jenkins
+                }
+            }
+        }
+
+
         stage("build jar") {
 
             steps {
@@ -41,9 +56,9 @@ pipeline {
             steps {
                 script {
                     //gv.buildImage()
-                    buildImage 'vascheffer/demo-app:jma-2.0'
+                    buildImage "vascheffer/demo-app:${env.IMAGE_NAME}"
                     dockerLogin()
-                    dockerPush 'vascheffer/demo-app:jma-2.0'
+                    dockerPush "vascheffer/demo-app:${env.IMAGE_NAME}"
                 }
             }
         }
